@@ -1,47 +1,71 @@
-APP= PriorityQueue
-TEST= PriorityQueue_test
+APP_1 = Receiver
+TEST_1= Receiver_test
+APP_2 = Sender
+TEST_2= Sender_test
 
 FLAGS= -c -g -Iinc -Wall -pedantic -iquote headers
 
 
-__start__: ./PriorityQueue
-	./PriorityQueue
+__start__: ./Receiver
+	./Receiver
 
-test: ./PriorityQueue_test
-	./PriorityQueue_test
+receiver: ./Receiver
+	./Receiver
 
-./PriorityQueue: obj obj/main.o
-./PriorityQueue_test: obj obj/test.o 
+test_r: ./Receiver_test
+	./Receiver_test
 
-obj:
-	mkdir obj
+sender: ./Sender
+	./Sender
 
-./${APP}: obj obj/main.o obj/Node.o obj/Queue.o
-	g++ -o ./${APP} obj/main.o obj/Node.o obj/Queue.o
+test_s: ./Sender_test
+	./Sender_test
 
-./${TEST}: obj obj/test.o obj/Node.o obj/Queue.o
-	g++ -o ./${TEST} obj/test.o obj/Node.o obj/Queue.o
+./Receiver: r_obj r_obj/main.o
+./Receiver_test: r_obj r_obj/test.o 
+./Sender: s_obj s_obj/main.o
+./Sender_test: s_obj s_obj/test.o
+
+r_obj:
+	mkdir r_obj
+
+s_obj:
+	mkdir s_obj
+
+./${APP_1}: r_obj r_obj/main.o 
+	g++ -o ./${APP_1} r_obj/main.o 
+
+./${APP_2}: s_obj s_obj/main.o 
+	g++ -o ./${APP_2} s_obj/main.o 
+
+./${TEST_1}: r_obj r_obj/test.o
+	g++ -o ./${TEST_1} r_obj/test.o
+
+./${TEST_2}: s_obj s_obj/test.o
+	g++ -o ./${TEST_2} s_obj/test.o
 
 
-obj/main.o: project/main.cpp headers/Node.hpp headers/Queue.hpp
-	g++  ${FLAGS} -o obj/main.o project/main.cpp
+r_obj/main.o: receiver/main.cpp headers/Node.hpp headers/PQueue.hpp
+	g++  ${FLAGS} -o r_obj/main.o receiver/main.cpp
 
-obj/test.o: project/test.cpp headers/Node.hpp headers/Queue.hpp
-	g++  ${FLAGS} -o obj/test.o project/test.cpp
+r_obj/test.o: receiver/test.cpp headers/Node.hpp headers/PQueue.hpp
+	g++  ${FLAGS} -o r_obj/test.o receiver/test.cpp
 
-obj/Node.o: project/Node.cpp
-	g++  ${FLAGS} -o obj/Node.o project/Node.cpp
+s_obj/main.o: sender/main.cpp
+	g++  ${FLAGS} -o s_obj/main.o sender/main.cpp
 
-obj/Queue.o: project/Queue.cpp
-	g++  ${FLAGS} -o obj/Queue.o project/Queue.cpp
+s_obj/test.o: sender/test.cpp headers/Stack_node.hpp headers/Stack.hpp
+	g++  ${FLAGS} -o s_obj/test.o sender/test.cpp
+
 
 clean:
-	rm -f obj/* ./${APP} ./${TEST}
+	rm -f r_obj/* ./${APP_1} ./${TEST_1} ./${TEST_2} ./${APP_2}
 
 
 help:
 	@echo
 	@echo " make        - compile and run your code"
+	@echo " make test   - compile and run test"
 	@echo " make clean  - delete products of compilation"
 	@echo " make help   - displays help information"
 	@echo
