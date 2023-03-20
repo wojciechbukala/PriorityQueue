@@ -1,10 +1,13 @@
 #include <iostream>
 #include <stdio.h>
 #include <fstream>
+#include <algorithm>
 #include "Stack.hpp"
 
 
 using namespace std;
+
+
 
 int main()
 {
@@ -23,7 +26,7 @@ int main()
     file = fopen(file_name.c_str(), "r");
     if (file == NULL) cout << "Error opening file" << endl;
 
-    int i = 0, a = 0;
+    int i = 0, size = 0;
     std::string sample = "";
     Stack<std::string> s;
 
@@ -31,29 +34,45 @@ int main()
     {
         charackter = fgetc(file);
         sample += charackter;
-        //cout << charackter[i];
         ++i;
         if(i == pack_size) 
         {
-            //sample = charackter;
-            //cout << charackter << endl;
             s.push(sample);
             sample = "";
             i = 0;
+            size++;
         }
     } while(charackter != EOF);
 
     fclose(file);
 
-    //s.view();
+    std::string Content[size];
+    int Keys[size];
 
-    int sample_key = 1;
-    std::ofstream CsvFile;
-    CsvFile.open ("buffor.csv");
+
+    int RandOrder[size];
+    srand(time(0));
+    for(int i=0; i<size; ++i) 
+    {
+        RandOrder[i] = i;
+    }
+    std::random_shuffle(&RandOrder[0],&RandOrder[size]); 
+
+    int a = 0;
     while(!s.empty())
     {
-        CsvFile << s.remove().getElement() << "," << sample_key << std::endl;
-        sample_key++;
+
+        Content[RandOrder[a]] = s.remove().getElement();
+        Keys[RandOrder[a]] = a;
+        a++;
+    }
+
+    std::ofstream TxtFile;
+    TxtFile.open ("buffor.txt");
+    TxtFile << pack_size << std::endl; 
+    for(int i=0; i<size; ++i)
+    {
+        TxtFile << Content[i] << " " << Keys[i] << std::endl;
     }
     
 

@@ -1,5 +1,5 @@
 #include <iostream>
-//#include <bits/stdc++.h>
+#include <algorithm>
 #include "Stack.hpp"
 
 
@@ -32,8 +32,12 @@ int main()
     //e.remove();
     e.view();
 */
-    char a[4] = {'a', 'b', 'c', 'd'};
-    std::string s_a = a;
-    cout << s_a <<endl;
-        return 0;
+    srand(time(0));
+    int a[8] = {1,2,3,4,5,6,7,8};
+    for(int i=0; i<8; ++i) cout << a[i];
+    std::random_shuffle(&a[0],&a[7]);
+    cout << endl;
+    for(int i=0; i<8; ++i) cout << a[i];
+    cout << endl;
+    return 0;
 }

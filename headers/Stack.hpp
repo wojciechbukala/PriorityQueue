@@ -13,6 +13,7 @@ class Stack : public Stack_node<T>
         void push(T new_elem);
         void view();
         Stack_node<T> remove();
+        //void mix(int size);
 
     private:
         Stack_node<T>* head;
@@ -76,6 +77,15 @@ Stack_node<T> Stack<T>::remove()
 
     return temp; 
 }
+
+/*
+template <typename T>
+void Stack<T>::mix(int size)
+{
+    Stack_node<T> temp;
+    temp = remove();
+
+} */
 
 template <typename T>
 void Stack<T>::view()

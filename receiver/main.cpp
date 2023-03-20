@@ -1,57 +1,52 @@
 #include <iostream>
+#include <fstream>
+#include <string>
 #include "PQueue.hpp"
 
 using namespace std;
 
 int main()
 {
-    cout << "Program bazujący na kolejce priorytetowej" << endl;
+    cout << "Odbieranie pakietu." << endl;
+    int pack_size, key;
+    std::string line, elem, key_str;
+    PriorityQueue<std::string> Q;
 
-    char w = ' ';
-    std::string t = " ";
-    int p = 0;
-    PriorityQueue<std::string> p_queue;
-    Node<std::string> elem;
+    ifstream File("buffor.txt");
+    if(!File.is_open()) cout << "Nie udalo sie otworzyc pliku" << endl;
+    else
+    { 
+        getline(File,line);
+        pack_size = stoi(line);
+        //cout << pack_size << endl;
 
-    do
-    {
-        cout << "Menu wyboru:" << endl;
-        cout << "P - podawanie pakietu." << endl;
-        cout << "O - odszyfrowywanie sekwencji." << endl;
-        cout << "E - koniec programu" << endl;
-        cin >> w;
-
-        switch (w)
+        while(getline(File,line))
         {
-        case 'P':
-            cout << endl << "Podaj tresc: ";
-            cin >> t;
-            cout << "Podaj priorytet: ";
-            cin >> p;
+            elem = "";
+            key_str = "";
+            for(int i=0; i<pack_size; ++i)
+            {
+                elem += line[i];
+            }
+            for(int i = pack_size; i<int(line.size()); ++i)
+            {
+                key_str += line[i];
+            }
+            if(line.size() > 0) key = stoi(key_str);
+            Q.push(elem,key);
+        }
+    }
 
-            p_queue.push(t,p);
-            break;
+    cout << "Wiadomosc: " <<endl;
 
-        case 'O':
-
-        cout << "Wiadomosc: " <<endl;
-
-        while(!p_queue.empty())
+        while(!Q.empty())
         {
-            cout << p_queue.removeMax().getElement() << " ";
+            cout << Q.removeMax().getElement();
         } 
         cout << endl << endl;
-        break;
-
-        case 'E':
-        cout << "Exit" << endl;
-        break;
-     
-        default:
-        cout << "Podano bledna opcje, sprobuj jeszcze raz" << endl;
-            break;
-        }
-    } while(w != 'E');
     
-    return 0;
+
+    File.close();
+
+
 }
