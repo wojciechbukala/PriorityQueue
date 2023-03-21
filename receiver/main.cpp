@@ -43,7 +43,7 @@ int main()
         {
             cout << Q.removeMax().getElement();
         } 
-        cout << endl << endl;
+        cout << endl;
     
 
     File.close();

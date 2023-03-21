@@ -26,20 +26,28 @@ int main()
     file = fopen(file_name.c_str(), "r");
     if (file == NULL) cout << "Error opening file" << endl;
 
-    int i = 0, size = 0;
+    int size = 0;
     std::string sample = "";
     Stack<std::string> s;
 
     do
     {
-        charackter = fgetc(file);
-        sample += charackter;
-        ++i;
-        if(i == pack_size) 
+        if((charackter = fgetc(file)) == EOF)
         {
+            // the last pack can be incomplete, so we complete it with " "
+            for(int j=sample.size(); j<pack_size; ++j)
+            {
+                sample += " ";
+            }
             s.push(sample);
-            sample = "";
-            i = 0;
+            size++;
+            break;
+        } 
+        sample += charackter;
+        if(int(sample.size()) == pack_size) // if sample reached the size of the pack 
+        {                                   // program sends it to the stack
+            s.push(sample);
+            sample.clear();
             size++;
         }
     } while(charackter != EOF);
@@ -56,7 +64,8 @@ int main()
     {
         RandOrder[i] = i;
     }
-    std::random_shuffle(&RandOrder[0],&RandOrder[size]); 
+    // shuffled array will determine the position of each pack
+    std::random_shuffle(&RandOrder[0],&RandOrder[size]);
 
     int a = 0;
     while(!s.empty())
@@ -68,7 +77,7 @@ int main()
     }
 
     std::ofstream TxtFile;
-    TxtFile.open ("buffor.txt");
+    TxtFile.open ("buffor.txt"); // intermediary file 
     TxtFile << pack_size << std::endl; 
     for(int i=0; i<size; ++i)
     {
