@@ -64,7 +64,7 @@ int main()
     {
         RandOrder[i] = i;
     }
-    // shuffled array will determine the position of each pack
+    // shuffled array will determine the position of each pack 
     std::random_shuffle(&RandOrder[0],&RandOrder[size]);
 
     int a = 0;
@@ -77,7 +77,7 @@ int main()
     }
 
     std::ofstream TxtFile;
-    TxtFile.open ("buffor.txt"); // intermediary file 
+    TxtFile.open ("buffor.txt");
     TxtFile << pack_size << std::endl; 
     for(int i=0; i<size; ++i)
     {
