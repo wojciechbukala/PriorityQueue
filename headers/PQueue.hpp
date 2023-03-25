@@ -10,7 +10,7 @@ class PriorityQueue : public Node<T>
         //~PriorityQueue();
         bool empty();
         int size();
-        void push(T new_elem, unsigned short new_key);
+        void push(T new_elem, int new_key);
         void view();
         Node<T> removeMin();
         Node<T> removeMax();
@@ -44,7 +44,7 @@ int PriorityQueue<T>::size()
 }
 
 template <typename T>
-void PriorityQueue<T>::push(T new_elem, unsigned short new_key)
+void PriorityQueue<T>::push(T new_elem, int new_key)
 {
     Node<T>* temp = new Node<T>(new_elem,new_key);
     Node<T>* temp_pointer = NULL; 
@@ -136,7 +136,7 @@ Node<T> PriorityQueue<T>::removeMax()
     {
         std::cout << "KOLEJKA JEST PUSTA NIE MOZNA USUNAC ELEMENTOW." << std::endl;
 
-    }
+    } 
 }
 
 template <typename T>
