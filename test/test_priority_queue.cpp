@@ -65,7 +65,7 @@ TEST(RemoveMax, Border_valuses)
     sq.removeMax();
     EXPECT_EQ(sq.size(), 0);
 
-    //EXPECT_THROW(sq.removeMax(), int);
-    //poszukać coś o expect_throw
-
+    //EXPECT_THROW(sq.removeMax(), std::runtime_error);
 }
+
+
