@@ -7,46 +7,76 @@ using namespace std;
 
 int main()
 {
-    cout << "Odbieranie pakietu." << endl;
-    int pack_size, key;
-    std::string line, elem, key_str;
-    PriorityQueue<std::string> Q;
+    PriorityQueue<std::string> q;
 
-    ifstream File("buffor.txt");
-    if(!File.is_open()) cout << "Nie udalo sie otworzyc pliku" << endl;
-    else
+    char charackter;
+    std::string elem = "";
+
+    std::ifstream buffer_file;
+    buffer_file.open("buffer/file");
+
+    while(buffer_file.get(charackter))
     { 
-        getline(File,line);
-        pack_size = stoi(line);
-        //cout << pack_size << endl;
+        elem+=charackter;   
+    }
+    int folder_size = stoi(elem);
+    elem.clear();
+    buffer_file.close();
 
-        while(getline(File,line))
+    for(int i=0; i<folder_size; ++i)
+    {
+        buffer_file.open("buffer/file"+to_string(i));
+
+        if(buffer_file.good())
         {
-            elem = "";
-            key_str = "";
-            for(int i=0; i<pack_size; ++i)
+            while(!buffer_file.eof())
             {
-                elem += line[i];
+                buffer_file.get(charackter);
+                elem += charackter;
             }
-            for(int i = pack_size; i<int(line.size()); ++i)
-            {
-                key_str += line[i];
-            }
-            if(line.size() > 0) key = stoi(key_str);
-            Q.push(elem,key);
         }
+        buffer_file.close();
+
+        //finding key which should be in the last line of the elem string
+        size_t position = elem.find_last_of('\n');
+
+        if(position != std::string::npos)
+        {
+            //dividing into info and key, pushing to the priority queue
+            q.push(elem.substr(0, position), std::stoi(elem.substr(position + 1)));
+        }
+        elem.clear();
     }
 
-    cout << "Wiadomosc: " <<endl;
+    std::string out_file = "";
+    cout << "Podaj plik do zapisu: " <<endl;
+    cin >> out_file;
 
-        while(!Q.empty())
+    std::ofstream output_file;
+    output_file.open(out_file);
+
+    if(output_file.good())
+    {
+        while(!q.empty())
         {
-            cout << Q.removeMax().getElement();
-        } 
-        cout << endl;
-    
+            output_file << q.removeMax().getElement();
+        }
+    }
+    else
+    {
+        cout << "Blad pliku" << endl;
+    }
+    output_file.close();
 
-    File.close();
+    cout << "Zapisano wiadomosc w: " << out_file << endl; 
+/*
+    while(!q.empty())
+    {
+        cout << q.removeMax().getElement();
+    } 
+*/
+
+    return 0;
 
 
 }

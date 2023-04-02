@@ -129,10 +129,10 @@ Node<T> PriorityQueue<T>::removeMax()
         } 
         else
         {
-            throw 2;
+            throw std::runtime_error("empty queue");
         }
     }
-    catch(int error_num)
+    catch(std::runtime_error &e)
     {
         std::cout << "KOLEJKA JEST PUSTA NIE MOZNA USUNAC ELEMENTOW." << std::endl;
 

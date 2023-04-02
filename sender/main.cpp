@@ -2,12 +2,11 @@
 #include <stdio.h>
 #include <fstream>
 #include <algorithm>
+#include <sys/stat.h>
 #include "Stack.hpp"
 
 
 using namespace std;
-
-
 
 int main()
 {
@@ -17,76 +16,78 @@ int main()
     cout << "Podaj wielkosc pakietow" << endl;
     cin >> pack_size;
 
-    char charackter;
-
     cout << "Podaj nazwe pliku do odczytu" <<endl;
     cin >> file_name; 
 
-    FILE* file;
-    file = fopen(file_name.c_str(), "r");
-    if (file == NULL) cout << "Error opening file" << endl;
+
+    std::ifstream infile;
 
     int size = 0;
-    std::string sample = "";
-    Stack<std::string> s;
+    char charackter;
+    std::string buffer="";
 
-    do
+    Stack<std::string> stack;
+
+    infile.open(file_name);
+    if(infile.good())
     {
-        if((charackter = fgetc(file)) == EOF)
+        while(!infile.eof())
         {
-            // the last pack can be incomplete, so we complete it with " "
-            for(int j=sample.size(); j<pack_size; ++j)
+            for(int i=0;((!infile.eof()) && i<pack_size);++i)
             {
-                sample += " ";
+                infile.get(charackter);
+                buffer +=charackter ;
             }
-            s.push(sample);
-            size++;
-            break;
-        } 
-        sample += charackter;
-        if(int(sample.size()) == pack_size) // if sample reached the size of the pack 
-        {                                   // program sends it to the stack
-            s.push(sample);
-            sample.clear();
-            size++;
+            stack.push(buffer);
+            buffer.clear();
+            ++size;
         }
-    } while(charackter != EOF);
-
-    fclose(file);
-
+    infile.close();
+        
+    }
+    else
+    {
+        cout << "brak pliku" << endl;
+    }
     std::string Content[size];
     int Keys[size];
 
-
     int RandOrder[size];
     srand(time(0));
-    for(int i=0; i<size; ++i) 
+    for(int i=0; i<size; ++i)
     {
         RandOrder[i] = i;
     }
-    // shuffled array will determine the position of each pack 
+    //suffled array will determine the position of each pack
     std::random_shuffle(&RandOrder[0],&RandOrder[size]);
-
-    int a = 0;
-    while(!s.empty())
-    {
-
-        Content[RandOrder[a]] = s.remove().getElement();
-        Keys[RandOrder[a]] = a;
-        a++;
-    }
-
-    std::ofstream TxtFile;
-    TxtFile.open ("buffor.txt");
-    TxtFile << pack_size << std::endl; 
-    for(int i=0; i<size; ++i)
-    {
-        TxtFile << Content[i] << " " << Keys[i] << std::endl;
-    }
     
 
-    cout << "Sending." << endl;
+    int a = 0;
+    while(!stack.empty())
+    {
+        Content[RandOrder[a]] = stack.remove().getElement();
+        Keys[RandOrder[a]] = a;
+        ++a;
+    }
 
+
+    mkdir("buffer", 0777);
+    std::string folder = "buffer/";
+
+    std::ofstream BuffFile;
+    BuffFile.open(folder+"file");
+    BuffFile << size;
+    BuffFile.close();
+    
+    for(int i=0; i<size; ++i)
+    {
+        BuffFile.open(folder+"file"+to_string(i));
+        BuffFile << Content[i] << endl;
+        BuffFile << Keys[i];
+        BuffFile.close();
+    }
+
+    cout << "Sending." << endl;
 
     return 0;
 }

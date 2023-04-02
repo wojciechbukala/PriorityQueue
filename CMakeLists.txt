@@ -60,3 +60,4 @@ gtest_discover_tests(priority_queue_test)
 
 target_compile_options(${R} PRIVATE ${FLAGS})
 target_compile_options(${S} PRIVATE ${FLAGS})
+

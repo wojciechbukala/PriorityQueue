@@ -78,15 +78,6 @@ Stack_node<T> Stack<T>::remove()
     return temp; 
 }
 
-/*
-template <typename T>
-void Stack<T>::mix(int size)
-{
-    Stack_node<T> temp;
-    temp = remove();
-
-} */
-
 template <typename T>
 void Stack<T>::view()
 {

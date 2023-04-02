@@ -68,4 +68,29 @@ TEST(RemoveMax, Border_valuses)
     //EXPECT_THROW(sq.removeMax(), std::runtime_error);
 }
 
+TEST(RemoveMax, Wide_range_value)
+{
+    PriorityQueue<int> iq;
+	
+	srand((unsigned) time(NULL));
+
+	// Get a random number
+	int random = rand();
+
+
+    for(int i=0; i<500; ++i)
+    {
+	    // Get a random number
+	    int random = rand();
+        iq.push(random, i);
+    }
+
+    for(int i = 1000; i>500; --i)
+    {
+        iq.push(random, i);
+    }
+
+    EXPECT_EQ(iq.size(), 1000);
+}
+
 
